@@ -9,14 +9,13 @@ const getRandomPositiveInteger = (min, max) => {
 
 //Функция для проверки максимальной длины строки
 
-const checkMaxStringLength = (testString, maxLength) => testString <= maxLength;
+const checkMaxStringLength = (testString, maxLength) => testString.length <= maxLength;
 
-checkMaxStringLength (120, 140);
+checkMaxStringLength ('Hello', 140);
 
 // Генерация данных
 
 const USER_PHOTO = 25;
-const USER_PHOTO_COMMENTS = 15;
 const USER_PHOTO_DESCRIPTION = [
   'Зимнее путешествие на озеро Байкал',
   'Японский чайный сад',
@@ -44,29 +43,22 @@ const USER_NAME = [
 
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
-// eslint-disable-next-line arrow-body-style
-const createComments = () => {
-  return {
-    commentId: getRandomPositiveInteger(1, 120),
-    avatar: 'img/avatar&{getRandomPositiveInteger(1, 6)}.svg',
-    message: getRandomArrayElement(MESSAGE),
-    name: getRandomArrayElement(USER_NAME),
-  };
-};
 
-const objectComments = new Array(USER_PHOTO_COMMENTS).full(null).map(() => createComments());
+const createComments = () => ({
+  id: getRandomPositiveInteger(1, 120),
+  avatar: `img/avatar${  getRandomPositiveInteger(1, 6)  }.svg`,
+  message: getRandomArrayElement(MESSAGE),
+  name: getRandomArrayElement(USER_NAME),
+});
 
-// eslint-disable-next-line arrow-body-style
-const createPhoto = () => {
-  return {
-    userId: getRandomPositiveInteger(1, 25),
-    url: 'photos/&{getRandomPositiveInteger(1, 25).jpg',
-    description: getRandomArrayElement(USER_PHOTO_DESCRIPTION),
-    likes: getRandomPositiveInteger(15, 200),
-    comment: getRandomArrayElement(objectComments),
-  };
-};
+const createPhoto = () => ({
+  id: getRandomPositiveInteger(1, 25),
+  url: `photos/${ getRandomPositiveInteger(1, 25)  }.jpg`,
+  description: getRandomArrayElement(USER_PHOTO_DESCRIPTION),
+  likes: getRandomPositiveInteger(15, 200),
+  comments: new Array(getRandomPositiveInteger(1, 6)).fill(null).map(() => createComments()),
+});
 
 const objectPhoto = new Array(USER_PHOTO).fill(null).map(() => createPhoto());
 
-objectPhoto ();
+objectPhoto;
