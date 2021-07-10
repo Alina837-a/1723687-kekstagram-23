@@ -1,10 +1,10 @@
 // Модуль, который отвечает за отрисовку миниатюр
-import {createObjects} from '.data.js';
+import {objectPhoto} from './data.js';
 
 const picturesListElement = document.querySelector('.pictures');
 const pictureTemplete = document.querySelector('#picture').content.querySelector('.picture');
 
-const picturesThumbnails = createObjects();
+const picturesThumbnails = objectPhoto();
 const picturesListFragment = document.createDocumentFragment();
 
 picturesThumbnails.forEach(({url, likes, comments}) => {
