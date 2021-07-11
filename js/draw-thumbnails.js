@@ -16,3 +16,5 @@ picturesThumbnails.forEach(({url, likes, comments}) => {
 });
 
 picturesListElement.appendChild(picturesListFragment);
+
+export {picturesListElement};
