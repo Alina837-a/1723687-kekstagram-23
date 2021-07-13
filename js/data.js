@@ -30,7 +30,7 @@ const USER_NAME = [
 
 const createComments = () => ({
   id: getRandomPositiveInteger(1, 120),
-  avatar: `img/avatar${  getRandomPositiveInteger(1, 6)  }.svg`,
+  avatar: `img/avatar-${  getRandomPositiveInteger(1, 6)  }.svg`,
   message: getRandomArrayElement(MESSAGE),
   name: getRandomArrayElement(USER_NAME),
 });
@@ -43,7 +43,7 @@ const createPhoto = () => ({
   comments: new Array(getRandomPositiveInteger(1, 6)).fill(null).map(() => createComments()),
 });
 
-const objectPhoto = () => new Array(USER_PHOTO).fill(null).map(() => createPhoto());
+const objectPhoto = new Array(USER_PHOTO).fill(null).map(() => createPhoto());
 
 export {objectPhoto};
 
