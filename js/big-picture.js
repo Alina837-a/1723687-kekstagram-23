@@ -1,5 +1,4 @@
 //Модуль который отвечает за отрисовку окна с полноразмерным изображением
-
 import {isEscEvent} from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
@@ -54,6 +53,7 @@ const generatedComments = (comments) => {
 export const renderBigPicture = (data) => {
   const {url, likes, comments, description} = data;
   openPicture();
+
   bigPictureImg.src = url;
   likesCount.textContent = likes;
   commentsCount.textContent = comments.length;
