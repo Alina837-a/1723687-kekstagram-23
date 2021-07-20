@@ -1,7 +1,7 @@
 // Редактирование масштаба изображения
 
 const uploadPreview = document.querySelector('.img-upload__preview img');
-const scaleControlValue = document.querySelector('.scale__control--value');
+export const scaleControlValue = document.querySelector('.scale__control--value');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 
@@ -33,5 +33,4 @@ const bigValueScale = (evt) => {
   }
 };
 
-scaleControlBigger.addEventListener('click', bigValueScale);
-scaleControlSmaller.addEventListener('click', minValueScale);
+export {minValueScale, bigValueScale, scaleControlBigger, scaleControlSmaller};

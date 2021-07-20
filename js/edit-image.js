@@ -1,6 +1,6 @@
 // Функциональность по редактированию изображения
-const effectLevelSlider = document.querySelector('.effect-level__slider');
-const imgUploadPreview = document.querySelector('.img-upload__preview img');
+export const effectLevelSlider = document.querySelector('.effect-level__slider');
+export const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const imgUploadEffects = document.querySelector('.img-upload__effects');
 const imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');

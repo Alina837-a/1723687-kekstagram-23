@@ -1,5 +1,6 @@
-import {isEscEvent} from './util.js';
-import {checkMaxStringLength} from './util.js';
+import {isEscEvent, checkMaxStringLength} from './util.js';
+import {minValueScale, bigValueScale, scaleControlBigger, scaleControlSmaller, scaleControlValue} from './scale.js';
+import {imgUploadPreview, effectLevelSlider} from './edit-image.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -19,9 +20,10 @@ const closeForm = () => {
   uploadFile.value = '';
   textHashtags.value = '';
   textDescription.value = '';
+  scaleControlValue.value = '100%';
 };
 
-const closeFormEsc = (evt) => {
+const oncloseFormEsc = (evt) => {
   if (isEscEvent(evt)){
     if (textDescription === document.activeElement || textHashtags === document.activeElement) {
       return;
@@ -33,14 +35,23 @@ const closeFormEsc = (evt) => {
 const openForm = () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
-  document.addEventListener('keydown', closeFormEsc);
+  document.addEventListener('keydown', oncloseFormEsc);
+  scaleControlBigger.addEventListener('click', bigValueScale);
+  scaleControlSmaller.addEventListener('click', minValueScale);
 };
 
-const onCloseClick = () => closeForm();
+uploadFile.addEventListener('change', () => {
+  openForm();
+  document.addEventListener('keydown', oncloseFormEsc);
+  imgUploadPreview.style = 'none';
+});
 
-uploadFile.addEventListener('change', () => openForm());
-
-uploadCancel.addEventListener('click', () => onCloseClick());
+uploadCancel.addEventListener('click', () => {
+  closeForm();
+  document.removeEventListener('keydown', oncloseFormEsc);
+  scaleControlBigger.removeEventListener('click', bigValueScale);
+  scaleControlSmaller.removeEventListener('click', minValueScale);
+});
 
 // Хеш-тег
 
