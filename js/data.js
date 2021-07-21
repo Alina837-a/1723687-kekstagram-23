@@ -40,7 +40,7 @@ const createPhoto = () => ({
   url: `photos/${ getRandomPositiveInteger(1, 25)  }.jpg`,
   description: getRandomArrayElement(USER_PHOTO_DESCRIPTION),
   likes: getRandomPositiveInteger(15, 200),
-  comments: new Array(getRandomPositiveInteger(1, 6)).fill(null).map(() => createComments()),
+  comments: new Array(getRandomPositiveInteger(1, 120)).fill(null).map(() => createComments()),
 });
 
 const objectPhoto = new Array(USER_PHOTO).fill(null).map(() => createPhoto());

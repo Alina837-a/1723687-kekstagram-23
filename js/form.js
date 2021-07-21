@@ -1,6 +1,6 @@
 import {isEscEvent, checkMaxStringLength} from './util.js';
 import {minValueScale, bigValueScale, scaleControlBigger, scaleControlSmaller, scaleControlValue} from './scale.js';
-import {imgUploadPreview, effectLevelSlider} from './edit-image.js';
+import {imgUploadPreview, resetEffects} from './edit-image.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -21,6 +21,7 @@ const closeForm = () => {
   textHashtags.value = '';
   textDescription.value = '';
   scaleControlValue.value = '100%';
+  resetEffects();
 };
 
 const oncloseFormEsc = (evt) => {
@@ -37,17 +38,20 @@ const openForm = () => {
   body.classList.add('modal-open');
   document.addEventListener('keydown', oncloseFormEsc);
   scaleControlBigger.addEventListener('click', bigValueScale);
-  scaleControlSmaller.addEventListener('click', minValueScale);
 };
 
-uploadFile.addEventListener('change', () => {
+uploadFile.addEventListener('change', (evt) => {
   openForm();
+  const file = evt.target.files[0];
+  imgUploadPreview.src = URL.createObjectURL(file);
   document.addEventListener('keydown', oncloseFormEsc);
+  resetEffects();
   imgUploadPreview.style = 'none';
 });
 
 uploadCancel.addEventListener('click', () => {
   closeForm();
+  resetEffects();
   document.removeEventListener('keydown', oncloseFormEsc);
   scaleControlBigger.removeEventListener('click', bigValueScale);
   scaleControlSmaller.removeEventListener('click', minValueScale);
