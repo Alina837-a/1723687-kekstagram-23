@@ -2,8 +2,8 @@
 export const effectLevelSlider = document.querySelector('.effect-level__slider');
 export const imgUploadPreview = document.querySelector('.img-upload__preview img');
 const effectLevelValue = document.querySelector('.effect-level__value');
-const imgUploadEffects = document.querySelector('.img-upload__effects');
-const imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
+const uploadEffects = document.querySelector('.img-upload__effects');
+export const imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
 
 const effectName = {
   'chrome': 'effects__preview--chrome',
@@ -94,7 +94,7 @@ export function resetEffects () {
   imgUploadEffectLevel.classList.add('visually-hidden');
 }
 
-function applyEffect (effectId) {
+const applyEffect = (effectId) => {
   switch (effectId) {
     case 'effect-chrome':
       imgUploadPreview.style.filter = `grayscale(${effectLevelValue.value})`;
@@ -121,9 +121,9 @@ function applyEffect (effectId) {
       imgUploadPreview.style.filter = '';
       imgUploadEffectLevel.classList.add('visually-hidden');
   }
-}
+};
 
-imgUploadEffects.addEventListener('click', (evt) => {
+uploadEffects.addEventListener('click', (evt) => {
   if (!evt.target.id) {
     return;
   }

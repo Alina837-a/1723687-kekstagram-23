@@ -1,12 +1,14 @@
 import {isEscEvent, checkMaxStringLength} from './util.js';
 import {minValueScale, bigValueScale, scaleControlBigger, scaleControlSmaller, scaleControlValue} from './scale.js';
-import {imgUploadPreview, effectLevelSlider} from './edit-image.js';
+import {imgUploadPreview, resetEffects} from './edit-image.js';
+import {fetchData} from './api.js';
 
 const uploadFile = document.querySelector('#upload-file');
 const uploadOverlay = document.querySelector('.img-upload__overlay');
 const body = document.querySelector('body');
 const uploadCancel = document.querySelector('.img-upload__cancel');
 const textDescription = document.querySelector('.text__description');
+const imgUpForm = document.querySelector('.img-upload__form');
 const textHashtags = document.querySelector('.text__hashtags');
 const re = RegExp(/^#[A-Za-zА-Яа-я0-9]{1,19}$/);
 const MAX_HASHTAG = 5;
@@ -21,6 +23,7 @@ const closeForm = () => {
   textHashtags.value = '';
   textDescription.value = '';
   scaleControlValue.value = '100%';
+  resetEffects();
 };
 
 const oncloseFormEsc = (evt) => {
@@ -29,6 +32,7 @@ const oncloseFormEsc = (evt) => {
       return;
     }
     closeForm();
+    resetEffects();
   }
 };
 
@@ -40,9 +44,13 @@ const openForm = () => {
   scaleControlSmaller.addEventListener('click', minValueScale);
 };
 
-uploadFile.addEventListener('change', () => {
+uploadFile.addEventListener('change', (evt) => {
   openForm();
+  const file = evt.target.files[0];
+  imgUploadPreview.src = URL.createObjectURL(file);
   document.addEventListener('keydown', oncloseFormEsc);
+  scaleControlValue.value = '100%';
+  resetEffects();
   imgUploadPreview.style = 'none';
 });
 
@@ -101,3 +109,32 @@ const validationComments = () => {
 };
 
 textDescription.addEventListener('input', validationComments);
+
+// Функция отправки данных на сервер
+
+const setFormSubmit = (onSuccess) => {
+  imgUpForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    fetchData(
+      'https://23.javascript.pages.academy/kekstagram',
+      'POST',
+      () => {
+        onSuccess();
+        openForm('success');
+      },
+      () => {
+        closeForm();
+        openForm('error');
+      },
+      new FormData(evt.target),
+    );
+  });
+};
+
+const openFormSubmit = () => {
+  setFormSubmit(closeForm);
+};
+
+uploadFile.addEventListener('change', () => {
+  openFormSubmit;
+});

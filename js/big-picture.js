@@ -12,6 +12,46 @@ const socialCommentCount = document.querySelector('.social__comment-count');
 const uploadNewPictire = document.querySelector('.comments-loader');
 const body = document.querySelector('body');
 const commentTemplate = bigPicture.querySelector('.social__comment');
+const PAGE_SIZE = 5;
+let currentPage = 1;
+let currentComments = [];
+
+const getPictureComments = () => {
+  const fragment = document.createDocumentFragment();
+  const count = PAGE_SIZE * currentPage;
+  const showMore = count < currentComments.length;
+  socialCommentCount.textContent = count < currentComments.length ? count : currentComments.length;
+
+  currentComments.slice(0, count-1).forEach((comment) => {
+    const {avatar, name, message} = comment;
+    const commentElement = commentTemplate.cloneNode(true);
+    commentElement.querySelector('.social__picture').src = avatar;
+    commentElement.querySelector('.social__picture').alt = name;
+    commentElement.querySelector('.social__text').textContent = message;
+
+    fragment.appendChild(commentElement);
+  });
+
+  if (showMore) {
+    uploadNewPictire.classList.remove('hidden');
+  } else {
+    uploadNewPictire.classList.add('hidden');
+  }
+
+  return fragment;
+};
+
+const renderComments = () => {
+  socialCommentsList.textContent = '';
+  socialCommentsList.appendChild(getPictureComments());
+};
+
+const onShowMoreClick = () => {
+  currentPage++;
+  renderComments();
+};
+
+uploadNewPictire.addEventListener('click', onShowMoreClick);
 
 const closePictureEsc = (evt) => {
   if (isEscEvent(evt)){
@@ -39,17 +79,6 @@ buttonClose.addEventListener ( 'click', () => {
   closePicture();
 });
 
-const generatedComments = (comments) => {
-  for (let index = 0; index<= comments.length-1; index++) {
-    const {avatar, name, message} = comments[index];
-    const commentElement = commentTemplate.cloneNode(true);
-    commentElement.querySelector('.social__picture').src = avatar;
-    commentElement.querySelector('.social__picture').alt = name;
-    commentElement.querySelector('.social__text').textContent = message;
-    socialCommentsList.appendChild(commentElement);
-  }
-};
-
 export const renderBigPicture = (data) => {
   const {url, likes, comments, description} = data;
   openPicture();
@@ -58,7 +87,9 @@ export const renderBigPicture = (data) => {
   likesCount.textContent = likes;
   commentsCount.textContent = comments.length;
   descriptionPicture.textContent = description;
-  socialCommentsList.innerHTML = '';
-  generatedComments(comments);
+  currentComments = data.comments;
+  currentPage = 1;
+  renderComments();
+  body.classList.add('modal-open');
 };
 
