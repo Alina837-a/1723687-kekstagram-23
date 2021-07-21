@@ -9,6 +9,13 @@ const pictureTemplete = document.querySelector('#picture').content.querySelector
 const picturesThumbnails = objectPhoto;
 const picturesListFragment = document.createDocumentFragment();
 
+const removePicturesThumbnails = () => {
+  const listPictures = document.querySelectorAll('.picture');
+  for (let index = 0; index < listPictures.length; index++) {
+    listPictures[index].remove();
+  }
+};
+
 const renderPicturesThumbnails = (pictures) => {
   pictures.forEach((data) => {
     const { url, likes, comments } = data;
@@ -21,6 +28,7 @@ const renderPicturesThumbnails = (pictures) => {
     });
     picturesListFragment.appendChild(pictureElement);
   });
+  removePicturesThumbnails();
   picturesListElement.appendChild(picturesListFragment);
 };
 

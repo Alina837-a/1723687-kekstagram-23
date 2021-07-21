@@ -91,6 +91,5 @@ export const renderBigPicture = (data) => {
   currentPage = 1;
   renderComments();
   body.classList.add('modal-open');
-  socialCommentsList.firstChild.textContent = `${currentComments.length} из ${currentComments.length} комментариев`;
 };
 
