@@ -1,19 +1,14 @@
-import {showAlert} from './util.js';
-import './data.js';
-import {fetchData} from './api.js';
-import {renderPicturesThumbnails} from './draw-thumbnails.js';
+
+import {getPicturesContainer} from './mini-images.js';
+import {setUploadFormSubmit, onCloseFormPopup} from './form.js';
+import {removeFiltersHidden, onFiltersClick} from './filter.js';
+import {getData} from './api.js';
 import './big-picture.js';
 import './form.js';
-import './scale.js';
-import './edit-image.js';
-import {addImageFilters} from './filter-image.js';
 
-fetchData(
-  'https://23.javascript.pages.academy/kekstagram/data',
-  'GET',
-  (pictures) => {
-    renderPicturesThumbnails(pictures);
-    addImageFilters(pictures);
-  },
-  (onFail) => showAlert(onFail),
-);
+getData((images) => {
+  getPicturesContainer(images);
+  removeFiltersHidden();
+  onFiltersClick(images);
+});
+setUploadFormSubmit(onCloseFormPopup);
