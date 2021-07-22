@@ -1,3 +1,4 @@
+
 import {showAlert} from './util.js';
 
 const SERVER = 'https://23.javascript.pages.academy/kekstagram';
