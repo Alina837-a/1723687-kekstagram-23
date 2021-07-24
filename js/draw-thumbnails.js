@@ -1,31 +1,28 @@
-// Модуль, который отвечает за отрисовку миниатюр
+import { createFullSizePhoto } from './full-size-photo.js';
 
-import {objectPhoto} from './data.js';
-import {renderBigPicture} from './big-picture.js';
+const pictureTemplate = document.querySelector('#picture').content;
+const pictures = document.querySelector('.pictures');
 
-const picturesListElement = document.querySelector('.pictures');
-const pictureTemplete = document.querySelector('#picture').content.querySelector('.picture');
-
-const picturesThumbnails = objectPhoto;
-const picturesListFragment = document.createDocumentFragment();
-
-const renderPicturesThumbnails = (pictures) => {
-  pictures.forEach((data) => {
-    const { url, likes, comments } = data;
-    const pictureElement = pictureTemplete.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = url;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    pictureElement.querySelector('.picture__comments').textContent = comments.length;
-    pictureElement.addEventListener('click', () => {
-      renderBigPicture(data);
-    });
-    picturesListFragment.appendChild(pictureElement);
+function removePhotos() {
+  const pictureLinks = document.querySelectorAll('a.picture');
+  Array.from(pictureLinks).forEach((photo) => {
+    photo.remove();
   });
-  picturesListElement.appendChild(picturesListFragment);
-};
-
-renderPicturesThumbnails(picturesThumbnails);
-
-export {renderPicturesThumbnails};
+}
 
 
+export function renderPhotos(photos) {
+  removePhotos();
+  photos.forEach((photo) => {
+    const photosElement = pictureTemplate.cloneNode(true);
+    photosElement.querySelector('.picture__img').src = photo.url;
+    photosElement.querySelector('.picture__likes').textContent = photo.likes;
+    photosElement.querySelector('.picture__comments').textContent = photo.comments.length;
+
+    photosElement.querySelector('.picture').addEventListener('click', () => {
+      createFullSizePhoto(photo);
+    });
+
+    pictures.appendChild(photosElement);
+  });
+}
