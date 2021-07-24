@@ -1,39 +1,35 @@
+const SEND_DATA_URL = 'https://23.javascript.pages.academy/kekstagram';
+const GET_DATA_URL = 'https://23.javascript.pages.academy/kekstagram/data';
 
-import {showAlert} from './util.js';
-
-const SERVER = 'https://23.javascript.pages.academy/kekstagram';
-const DATA = 'https://23.javascript.pages.academy/kekstagram/data';
-
-const getData = (onSuccess) => {
-  fetch(DATA)
+const getPhotos = (onSuccess, onFail) => {
+  fetch(GET_DATA_URL)
     .then((response) => response.json())
-    .then((images) => {
-      onSuccess(images);
+    .then((photos) => {
+      onSuccess(photos);
     })
     .catch(() => {
-      showAlert('Не удалось загрузить данные с сервера');
+      onFail();
     });
 };
 
-const sendData = (onSuccess, downloadStatus, errorStatus, body) => {
-
-  fetch(SERVER,
+const sendData = (onSuccess, onFail, body) => {
+  fetch(
+    SEND_DATA_URL,
     {
       method: 'POST',
-      body: body,
+      body,
     },
   )
     .then((response) => {
-      if(response.ok) {
+      if (response.ok) {
         onSuccess();
-        downloadStatus();
       } else {
-        errorStatus();
+        onFail('Не удалось отправить форму. Попробуйте ещё раз');
       }
     })
     .catch(() => {
-      errorStatus;
+      onFail('Не удалось отправить форму. Попробуйте ещё раз');
     });
 };
 
-export {getData, sendData};
+export { getPhotos, sendData };
