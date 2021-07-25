@@ -1,54 +1,61 @@
-// Функциональсность по фильтрации изображений от других пользователей
+import { getRandomInteger } from './util.js';
+import {getPicturesContainer} from './draw-thumbnails.js';
+import {debounce} from './utils/debounce.js';
 
-import {getRandomArray, debounce} from './util.js';
-import {renderPicturesThumbnails} from './draw-thumbnails.js';
-
-const imagesFilters = document.querySelector('.img-filters');
-const form = imagesFilters.querySelector('.img-filters__form');
-const imagesFiltersButton = imagesFilters.querySelectorAll('.img-filters__button');
-const filterDefaultButton = imagesFilters.querySelector('#filter-default');
-const filterRandomButton = imagesFilters.querySelector('#filter-random');
-const filterDiscussedButton = imagesFilters.querySelector('#filter-discussed');
-
+const buttonConteiner = document.querySelector('.img-filters__form');
+const buttons = Array.from(buttonConteiner.children);
 const RERENDER_DELAY = 500;
+const NUMBER_RANDOM_IMAGES = 10;
 
-// Функция применения стиля на активную кнопку фильтра;
-const setStyleButtonFilter = (evt) => {
-  const buttonFilter = evt.target;
-  for (let index = 0; index < imagesFiltersButton.length; index++) {
-    imagesFiltersButton[index].classList.remove('img-filters__button--active');
-  }
-  buttonFilter.classList.add('img-filters__button--active');
+const removeFiltersHidden = () => {
+  const filters = document.querySelector('.img-filters');
+  filters.classList.remove('img-filters--inactive');
 };
 
-// Функция получения обсуждаемых изображений;
-const getDiscussedImages = (pictures) => {
-  const arrayDiscussedImages = pictures.slice();
-  arrayDiscussedImages.sort((second, first) => first.comments.length - second.comments.length);
-  return arrayDiscussedImages;
+const assignAnActiveClass = (activeButton) => {
+  buttons.forEach((element) => {
+    element.className = 'img-filters__button';
+  });
+  activeButton.classList.add('img-filters__button--active');
 };
 
-// Функция визуализации изображений с устранением дребезга;
-const renderPicturesDebounce = debounce(renderPicturesThumbnails, RERENDER_DELAY);
+const onFiltersClick = (images) => {
 
-// Обработчик события при выборе фильтра;
-const setImagesFilter = (evt, pictures) => {
-  const buttonFilter = evt.target;
-  setStyleButtonFilter(evt);
-  switch (buttonFilter) {
-    case filterDefaultButton:
-      return renderPicturesDebounce(pictures);
-    case filterRandomButton:
-      return  renderPicturesDebounce(getRandomArray(pictures));
-    case filterDiscussedButton:
-      return  renderPicturesDebounce(getDiscussedImages(pictures));
-  }
+  buttonConteiner.addEventListener('click', debounce((evt) => {
+
+    assignAnActiveClass(evt.target);
+
+    if(evt.target.id === 'filter-default') {
+      getPicturesContainer(images);
+    } else if (evt.target.id === 'filter-random') {
+      const randomImages = [];
+      let imagesArray = images.slice();
+
+      while(randomImages.length < NUMBER_RANDOM_IMAGES) {
+        const randomIndex = getRandomInteger(0, imagesArray.length - 1);
+        randomImages.push(imagesArray[randomIndex]);
+
+        imagesArray = imagesArray.filter((element) => imagesArray.indexOf(element) !== randomIndex);
+      }
+
+      getPicturesContainer(randomImages);
+    } else if (evt.target.id === 'filter-discussed') {
+      const theMistDiscussedImages = images.slice();
+
+      const getCommentsNumber = (element) => element.comments.length;
+
+      const compareTheNumberOfComments = (imagesA, imagesB) => {
+
+        const rankA = getCommentsNumber(imagesA);
+        const rankB = getCommentsNumber(imagesB);
+
+        return rankB - rankA;
+      };
+
+      theMistDiscussedImages.sort(compareTheNumberOfComments);
+      getPicturesContainer(theMistDiscussedImages);
+    }
+  }), RERENDER_DELAY);
 };
 
-//Функция отображения панели фильтров c обработчиком события при выборе фильтра;
-const addImageFilters = (pictures) => {
-  imagesFilters.classList.remove('img-filters--inactive');
-  form.addEventListener('click', (evt) => setImagesFilter(evt, pictures));
-};
-
-export {addImageFilters};
+export {removeFiltersHidden, onFiltersClick};
