@@ -1,25 +1,14 @@
-const ALERT_SHOW_TIME = 5000;
+const getRandomInteger = (firstInteger, lastInteger) => {
+  const lower = Math.ceil(Math.min(Math.abs(firstInteger), Math.abs(lastInteger)));
+  const upper = Math.floor(Math.max(Math.abs(firstInteger), Math.abs(lastInteger)));
 
-export function getRandomNumber(min, max) {
-  if (max <= min) {
-    [min, max] = [max, min];
-  }
-  if (min <= 0) {
-    min = 0;
-  }
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
 
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export function isValidString(string, maxLength) {
-  return string.length <= maxLength;
-}
-
-export function isEscEvent(evt) {
-  return evt.key === 'Escape' || evt.key === 'Esc';
-}
-
-export function showAlert (message) {
+const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';
@@ -30,13 +19,8 @@ export function showAlert (message) {
   alertContainer.style.fontSize = '30px';
   alertContainer.style.textAlign = 'center';
   alertContainer.style.backgroundColor = 'red';
-
   alertContainer.textContent = message;
-
   document.body.append(alertContainer);
+};
 
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
-}
-
+export {getRandomInteger, isEscEvent, showAlert};
