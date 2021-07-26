@@ -6,6 +6,8 @@ const getRandomInteger = (firstInteger, lastInteger) => {
   return Math.floor(result);
 };
 
+const checkStringLength = (string, maxLength) => string.length <= maxLength;
+
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 const showAlert = (message) => {
@@ -23,4 +25,4 @@ const showAlert = (message) => {
   document.body.append(alertContainer);
 };
 
-export {getRandomInteger, isEscEvent, showAlert};
+export {getRandomInteger, isEscEvent, showAlert, checkStringLength};
